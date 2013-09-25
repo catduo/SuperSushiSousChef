@@ -3,23 +3,23 @@ using System.Collections;
 
 public class Swiped : MonoBehaviour {
 	
-	private float returnTimer = 0.5F;
-	private float hitTime;
-
 	// Use this for initialization
 	void Start () {
-		hitTime = Time.time;
+		rigidbody.AddForce(Random.value * 500 - 250, Random.value *500 + 500, 0);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(returnTimer + hitTime < Time.time){
-			renderer.material.mainTextureOffset = new Vector2(0,0);
-		}	
 	}
 	
-	void TouchSensorSwipe () {
-		renderer.material.mainTextureOffset = new Vector2(0,0.5F);
-		hitTime = Time.time;
+	void Swipe () {
+		Debug.Log ("swipe");
+	}
+	
+	void OnCollisionEnter (Collision collision){
+		if (collision.collider.name == "SwipeCapsule"){
+			gameObject.GetComponent<MeshRenderer>().enabled = false;
+			gameObject.GetComponent<BoxCollider>().enabled = false;
+		}
 	}
 }

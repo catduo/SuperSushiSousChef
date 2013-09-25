@@ -18,7 +18,10 @@ public class GUIControls : MonoBehaviour {
 	private int ftueLocation = -1;
 	private float touchSpeed;
 	private Vector3 previousMouseLocation = new Vector3 (1000,1000,1000);
-	private float swipeThreshhold = 50;
+	private float swipeThreshhold = 10;
+	private LineRenderer drawSwipe;
+	private int vertexCount = 0;
+	private GameObject capsule;
 
 	// Use this for initialization
 	void Start () {
@@ -37,6 +40,9 @@ public class GUIControls : MonoBehaviour {
 		scoreScreen = GameObject.Find("ScoreScreen");
 		scoreText = GameObject.Find("Score");
 		comboText = GameObject.Find("ComboText");
+		drawSwipe = transform.GetComponent<LineRenderer>();
+		drawSwipe.SetVertexCount(0);
+		capsule = GameObject.Find ("SwipeCapsule");
 		/*
 		pauseButton.renderer.material.mainTextureOffset = new Vector2(0, 0.5F);
 		muteButton.renderer.material.mainTextureOffset = new Vector2(0.25F, 0.5F);
@@ -65,7 +71,7 @@ public class GUIControls : MonoBehaviour {
 	            Ray ray = Camera.main.ScreenPointToRay(touch.position);
 	            RaycastHit objectTouched ;
 	            if (Physics.Raycast (ray, out objectTouched)) {
-	                 objectTouched.transform.SendMessage(objectTouched.transform.name + "Tap", SendMessageOptions.DontRequireReceiver);
+	                 objectTouched.transform.SendMessage("Tap", SendMessageOptions.DontRequireReceiver);
 	            }
 			}
 			if(touch.phase == TouchPhase.Moved){
@@ -73,7 +79,7 @@ public class GUIControls : MonoBehaviour {
 		            Ray ray = Camera.main.ScreenPointToRay(touch.position);
 		            RaycastHit objectTouched ;
 		            if (Physics.Raycast (ray, out objectTouched)) {
-		                 objectTouched.transform.SendMessage(objectTouched.transform.name + "Swipe", SendMessageOptions.DontRequireReceiver);
+		                 objectTouched.transform.SendMessage("Swipe", SendMessageOptions.DontRequireReceiver);
 		            }
 				}
 			}
@@ -84,26 +90,33 @@ public class GUIControls : MonoBehaviour {
 	        Ray simRay = Camera.main.ScreenPointToRay(simTouch);
 	        RaycastHit objectTouchedSim ;
 	        if (Physics.Raycast (simRay, out objectTouchedSim)) {
-	             objectTouchedSim.transform.SendMessage(objectTouchedSim.transform.name + "Tap", SendMessageOptions.DontRequireReceiver);
+	             objectTouchedSim.transform.SendMessage("Tap", SendMessageOptions.DontRequireReceiver);
 	        }
 		}
 		//find everything that has the mouse click it and let it know
 		if(Input.GetMouseButton(0)){
 			if(previousMouseLocation != new Vector3 (1000,1000,1000) && Vector3.Distance(previousMouseLocation, Input.mousePosition) > swipeThreshhold){
-				Vector3 simTouch = Input.mousePosition;
-		        Ray simRay = Camera.main.ScreenPointToRay(simTouch);
-		        RaycastHit objectTouchedSim ;
-		        if (Physics.Raycast (simRay, out objectTouchedSim)) {
-		             objectTouchedSim.transform.SendMessage(objectTouchedSim.transform.name + "Swipe", SendMessageOptions.DontRequireReceiver);
-		        }
+				drawSwipe.SetVertexCount(vertexCount+1);
+				drawSwipe.SetPosition(vertexCount, new Vector3(Input.mousePosition.x/22.5F - Screen.width/45F, Input.mousePosition.y/22.5F - Screen.height/45F, -20F));
+				capsule.transform.position = new Vector3(previousMouseLocation.x/22.5F + (Input.mousePosition.x - previousMouseLocation.x) / 45F - Screen.width/45F, previousMouseLocation.y/22.5F + (Input.mousePosition.y - previousMouseLocation.y) / 45F - Screen.height/45F, -20F);
+       			capsule.transform.LookAt(new Vector3(previousMouseLocation.x/22.5F - Screen.width/45F, previousMouseLocation.y/22.5F - Screen.height/45F, -20F));
+				capsule.transform.Rotate (new Vector3 (90,0,0));
+       			capsule.transform.localScale = new Vector3(1F, (Input.mousePosition - previousMouseLocation).magnitude/45F, 1F);
+				vertexCount++;
 				previousMouseLocation = Input.mousePosition;
 			}
 			else{
+				capsule.transform.position = new Vector3 (1000,1000,1000);
 				previousMouseLocation = Input.mousePosition;
+				drawSwipe.SetVertexCount(0);
+				vertexCount = 0;
 			}
 		}
 		if(Input.GetMouseButtonUp(0)){
+			capsule.transform.position = new Vector3 (1000,1000,1000);
 			previousMouseLocation = new Vector3 (1000,1000,1000);
+			drawSwipe.SetVertexCount(0);
+			vertexCount = 0;
 		}
 	}
 	
