@@ -14,13 +14,13 @@ public class SwipeCollider : MonoBehaviour {
 	}
 	
 	void OnCollisionEnter (Collision collision) { 
-		collision.collider.SendMessage("Swipe");
+		collision.collider.SendMessage("Swipe", SendMessageOptions.DontRequireReceiver);
 	}
 	
 	void OnTriggerEnter (Collider other) {
-		other.SendMessage("Swipe");
+		other.SendMessage("Swipe", SendMessageOptions.DontRequireReceiver);
 	}
 	void OnTriggerStay (Collider other) {
-		other.SendMessage("Swipe");
+		other.SendMessage("Swipe", SendMessageOptions.DontRequireReceiver);
 	}
 }

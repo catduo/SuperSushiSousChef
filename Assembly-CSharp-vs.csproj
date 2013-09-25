@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\GUIControls.cs" />
+     <Compile Include="Assets\Scripts\ObjectCreator.cs" />
      <Compile Include="Assets\Scripts\SwipeCollider.cs" />
      <Compile Include="Assets\Scripts\Swiped.cs" />
      <Compile Include="Assets\Scripts\SwipedPart.cs" />
