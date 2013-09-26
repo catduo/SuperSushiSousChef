@@ -10,7 +10,10 @@ public class GUIControls : MonoBehaviour {
 	private GameObject comboText;
 	private GameObject scoreScreen;
 	private GameObject FTUE;
+	private AudioSource audioSource;
 	static public int score;
+	static public int bonusMultiplier;
+	static public int hitCount;
 	private bool paused;
 	private int topScore;
 	private bool gameOver = false;
@@ -21,8 +24,21 @@ public class GUIControls : MonoBehaviour {
 	private float swipeThreshhold = 10;
 	private LineRenderer drawSwipe;
 	private int vertexCount = 0;
+	private int vertexMax = 5;
 	private GameObject capsule;
 	private Vector3 screenToWorldCurrent;
+	public AudioClip swish1;
+	public AudioClip swish2;
+	public AudioClip swish3;
+	public AudioClip swish4;
+	public AudioClip swish5;
+	public AudioClip swish6;
+	public AudioClip swish7;
+	public AudioClip swish8;
+	public AudioClip swish9;
+	public AudioClip swish10;
+	public AudioClip swish11;
+	public AudioClip swish12;
 
 	// Use this for initialization
 	void Start () {
@@ -42,6 +58,7 @@ public class GUIControls : MonoBehaviour {
 		scoreText = GameObject.Find("Score");
 		comboText = GameObject.Find("ComboText");
 		drawSwipe = transform.GetComponent<LineRenderer>();
+		audioSource = transform.GetComponent<AudioSource>();
 		drawSwipe.SetVertexCount(0);
 		capsule = GameObject.Find ("SwipeCapsule");
 		/*
@@ -71,7 +88,7 @@ public class GUIControls : MonoBehaviour {
 			}
 			//create a collision with everything that is swiped by touch
 			if(touch.phase == TouchPhase.Moved){
-				if(previousPosition != new Vector3 (1000,1000,1000) && Vector3.Distance(previousPosition, touch.position) > swipeThreshhold){
+				if(previousPosition != new Vector3 (1000,1000,1000) && Vector3.Distance(previousPosition, touch.position) > swipeThreshhold && vertexCount < vertexMax){
 					drawSwipe.SetVertexCount(vertexCount+1);
 					previousPosition = mainCamera.camera.ScreenToWorldPoint(previousPosition);
 					screenToWorldCurrent = mainCamera.camera.ScreenToWorldPoint(touch.position);
@@ -82,6 +99,10 @@ public class GUIControls : MonoBehaviour {
 	       			capsule.transform.localScale = new Vector3(1F, (screenToWorldCurrent - previousPosition).magnitude/2, 1F);
 					vertexCount++;
 					previousPosition = touch.position;
+					if(vertexCount == 2){
+						RandomSwish();
+						audioSource.Play();
+					}
 				}
 				else{
 					capsule.transform.position = new Vector3 (1000,1000,1000);
@@ -102,7 +123,7 @@ public class GUIControls : MonoBehaviour {
 		}
 		//create a collision with everything that is swiped by mouse
 		if(Input.GetMouseButton(0)){
-			if(previousPosition != new Vector3 (1000,1000,1000) && Vector3.Distance(previousPosition, Input.mousePosition) > swipeThreshhold){
+			if(previousPosition != new Vector3 (1000,1000,1000) && Vector3.Distance(previousPosition, Input.mousePosition) > swipeThreshhold && vertexCount < vertexMax){
 				drawSwipe.SetVertexCount(vertexCount+1);
 				previousPosition = mainCamera.camera.ScreenToWorldPoint(previousPosition);
 				screenToWorldCurrent = mainCamera.camera.ScreenToWorldPoint(Input.mousePosition);
@@ -113,6 +134,10 @@ public class GUIControls : MonoBehaviour {
        			capsule.transform.localScale = new Vector3(1F, (screenToWorldCurrent - previousPosition).magnitude/2, 1F);
 				vertexCount++;
 				previousPosition = Input.mousePosition;
+				if(vertexCount == 2){
+					RandomSwish();
+					audioSource.Play();
+				}
 			}
 			else{
 				capsule.transform.position = new Vector3 (1000,1000,1000);
@@ -209,6 +234,62 @@ public class GUIControls : MonoBehaviour {
 					FTUE.transform.GetChild(i).renderer.enabled = false;
 				}
 			}
+		}
+	}
+	
+	void RandomSwish () {
+		switch(Mathf.FloorToInt(Random.value * 12)){
+		case 0:
+			audioSource.clip = swish1;
+			break;
+			
+		case 1:
+			audioSource.clip = swish2;
+			break;
+			
+		case 2:
+			audioSource.clip = swish3;
+			break;
+			
+		case 3:
+			audioSource.clip = swish4;
+			break;
+			
+		case 4:
+			audioSource.clip = swish5;
+			break;
+			
+		case 5:
+			audioSource.clip = swish6;
+			break;
+			
+		case 6:
+			audioSource.clip = swish7;
+			break;
+			
+		case 7:
+			audioSource.clip = swish8;
+			break;
+			
+		case 8:
+			audioSource.clip = swish9;
+			break;
+			
+		case 9:
+			audioSource.clip = swish10;
+			break;
+			
+		case 10:
+			audioSource.clip = swish11;
+			break;
+			
+		case 11:
+			audioSource.clip = swish12;
+			break;
+			
+		default:
+			audioSource.clip = swish1;
+			break;
 		}
 	}
 }

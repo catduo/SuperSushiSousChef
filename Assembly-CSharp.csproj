@@ -44,6 +44,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\BoundsLeftRight.cs" />
+     <Compile Include="Assets\Scripts\DishManager.cs" />
      <Compile Include="Assets\Scripts\GUIControls.cs" />
      <Compile Include="Assets\Scripts\ObjectCreator.cs" />
      <Compile Include="Assets\Scripts\SwipeCollider.cs" />
